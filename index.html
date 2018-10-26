@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>lxiaosong • TodoMVC</title>
+	<link rel="stylesheet" href="node_modules/todomvc-common/base.css">
+	<link rel="stylesheet" href="node_modules/todomvc-app-css/index.css">
+	<link rel="stylesheet" href="css/app.css">
+</head>
+
+<body>
+	<section id="app" class="todoapp">
+		<header class="header">
+			<h1>todos</h1>
+			<input 
+				class="new-todo" 
+				placeholder="What needs to be done?" 
+				v-focus 
+				@keyup.enter="addTodo" 
+				v-model="newTodo">
+		</header>
+		<section class="main">
+			<input 
+				id="toggle-all" 
+				class="toggle-all" 
+				type=checkbox
+				:checked="!activeNum"
+				v-model="toggleAll">
+			<label for="toggle-all">Mark all as complete</label>
+			<ul class="todo-list">
+				<li 
+					:class="{completed: item.isFinish}" 
+					v-for="(item,index) in dataList" 
+					:key="item.id"
+					@dblclick="showEdit(index)"
+					ref="show"
+					v-show="showArr[index]">
+					<div class="view">
+						<input 
+							class="toggle" 
+							type="checkbox" 
+							:checked="item.isFinish"
+							v-model="item.isFinish">
+						<label>{{item.content}}</label>
+						<button 
+							class="destroy"
+							@click.prevent="delTodo(index)"></button>
+					</div>
+					<input 
+						class="edit" 
+						v-model="item.content"
+						ref="text"
+						@keyup.enter="updateTodo(index)"
+						@blur="updateTodo(index)"
+						@keyup.esc="unedit(index)">
+				</li>
+			</ul>
+		</section>
+		<footer class="footer" v-show="dataList.length">
+			<span class="todo-count">
+				<strong>{{activeNum}}</strong> item left</span>
+			<ul class="filters">
+				<li>
+					<a :class="{selected: flag === 1}" href="#/" >All</a>
+				</li>
+				<li>
+					<a :class="{selected: flag === 2, disabled: activeNum === dataList.length}" href="#/active">Active</a>
+				</li>
+				<li>
+					<a :class="{selected: flag === 3, disabled: activeNum === dataList.length}" href="#/completed">Completed</a>
+				</li>
+			</ul>
+			<button 
+				class="clear-completed"
+				v-show="activeNum !== dataList.length"
+				@click="delAll">Clear completed</button>
+		</footer>
+	</section>
+	<footer class="info">
+		<p>Double-click to edit a todo</p>
+		<p>Template by
+			<a href="http://sindresorhus.com">Sindre Sorhus</a>
+		</p>
+		<p>Created by
+			<a href="http://todomvc.com">you</a>
+		</p>
+		<p>Part of
+			<a href="http://todomvc.com">TodoMVC</a>
+		</p>
+	</footer>
+	<script src="node_modules/todomvc-common/base.js"></script>
+	<script src="./node_modules/vue/dist/vue.js"></script>
+	<script src="js/app.js"></script>
+</body>
+
+</html>
